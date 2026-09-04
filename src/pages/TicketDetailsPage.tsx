@@ -5,7 +5,7 @@ function TicketDetailsPage() {
   const { ticketId } = useParams();
 
   const ticket = mockTickets.find(
-    (item) => item.id === ticketId
+    (item) => item.ticketId === ticketId
   );
 
   if (!ticket) {
@@ -33,7 +33,7 @@ function TicketDetailsPage() {
 
           <div className="page-header ticket-details-heading">
             <span className="ticket-detail-id">
-              {ticket.id}
+              {ticket.ticketId}
             </span>
 
             <h1>{ticket.title}</h1>

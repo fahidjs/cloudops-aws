@@ -9,7 +9,7 @@ export type TicketPriority =
   | "HIGH";
 
 export interface Ticket {
-  id: string;
+  ticketId: string;
   title: string;
   description: string;
   category: string;

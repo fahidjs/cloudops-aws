@@ -32,10 +32,10 @@ function MyTicketsPage() {
 
             <tbody>
               {mockTickets.map((ticket) => (
-                <tr key={ticket.id}>
+                <tr key={ticket.ticketId}>
                   <td className="ticket-id">
-                    <Link to={`/tickets/${ticket.id}`} className="ticket-link">
-                      {ticket.id}
+                    <Link to={`/tickets/${ticket.ticketId}`} className="ticket-link">
+                      {ticket.ticketId}
                     </Link>
                   </td>
 
