@@ -74,6 +74,9 @@ button {
 
   cursor: pointer;
 
+  text-decoration: none;
+  display: block;
+
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -389,4 +392,114 @@ button {
   .dashboard {
     padding: 20px;
   }
+}
+
+
+/* ======================
+   CREATE TICKET PAGE
+====================== */
+
+.create-ticket-page {
+  flex: 1;
+  padding: 32px 40px;
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  color: #0f172a;
+}
+
+.page-header p {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.ticket-form {
+  max-width: 700px;
+
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  padding: 28px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #334155;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+
+  padding: 12px 14px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #2563eb;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.submit-ticket-button {
+  border: none;
+  border-radius: 8px;
+
+  background: #2563eb;
+  color: white;
+
+  padding: 12px 18px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.submit-ticket-button:hover {
+  background: #1d4ed8;
+}
+
+.form-message {
+  margin-bottom: 18px;
+
+  padding: 10px 12px;
+
+  background: #eff6ff;
+  color: #1d4ed8;
+
+  border-radius: 8px;
+
+  font-size: 13px;
 }

@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 function Sidebar() {
   return (
     <aside className="sidebar">
@@ -7,17 +9,32 @@ function Sidebar() {
       </div>
 
       <nav className="sidebar-nav">
-        <button className="nav-item active">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `nav-item ${isActive ? "active" : ""}`
+          }
+        >
           Dashboard
-        </button>
+        </NavLink>
 
-        <button className="nav-item">
+        <NavLink
+          to="/tickets"
+          className={({ isActive }) =>
+            `nav-item ${isActive ? "active" : ""}`
+          }
+        >
           My Tickets
-        </button>
+        </NavLink>
 
-        <button className="nav-item">
+        <NavLink
+          to="/create-ticket"
+          className={({ isActive }) =>
+            `nav-item ${isActive ? "active" : ""}`
+          }
+        >
           Create Ticket
-        </button>
+        </NavLink>
       </nav>
     </aside>
   );
