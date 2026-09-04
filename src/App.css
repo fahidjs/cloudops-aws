@@ -503,3 +503,72 @@ button {
 
   font-size: 13px;
 }
+
+
+/* ======================
+   MY TICKETS PAGE
+====================== */
+
+.my-tickets-page {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-x: hidden;
+}
+
+.my-tickets-card {
+  background: white;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+.my-tickets-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 22px 24px;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.my-tickets-header h2 {
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.my-tickets-header p {
+  margin-top: 4px;
+
+  color: #64748b;
+  font-size: 13px;
+}
+
+.ticket-title-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  min-width: 240px;
+}
+
+.ticket-title-cell strong {
+  color: #0f172a;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ticket-title-cell span {
+  max-width: 340px;
+
+  color: #64748b;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

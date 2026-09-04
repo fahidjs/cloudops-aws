@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import DashboardPage from "./pages/DashboardPage";
 import CreateTicketPage from "./pages/CreateTicketPage";
+import MyTicketsPage from "./pages/MyTicketsPage";
 import "./App.css";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<DashboardPage />} />
+          <Route path="/tickets" element={<MyTicketsPage />} />
           <Route path="/create-ticket" element={<CreateTicketPage />} />
         </Routes>
       </div>
