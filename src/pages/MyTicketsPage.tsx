@@ -1,4 +1,5 @@
 import { mockTickets } from "../data/mockTickets";
+import { Link } from "react-router-dom";
 
 function MyTicketsPage() {
   return (
@@ -33,7 +34,9 @@ function MyTicketsPage() {
               {mockTickets.map((ticket) => (
                 <tr key={ticket.id}>
                   <td className="ticket-id">
-                    {ticket.id}
+                    <Link to={`/tickets/${ticket.id}`} className="ticket-link">
+                      {ticket.id}
+                    </Link>
                   </td>
 
                   <td>
@@ -63,9 +66,7 @@ function MyTicketsPage() {
                     </span>
                   </td>
 
-                  <td>
-                    {new Date(ticket.createdAt).toLocaleDateString()}
-                  </td>
+                  <td>{new Date(ticket.createdAt).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>

@@ -1,4 +1,5 @@
 import type { Ticket } from "../types/ticket";
+import { Link } from "react-router-dom";
 
 interface TicketTableProps {
   tickets: Ticket[];
@@ -13,9 +14,7 @@ function TicketTable({ tickets }: TicketTableProps) {
           <p>Latest IT support requests.</p>
         </div>
 
-        <button className="view-all-button">
-          View All
-        </button>
+        <button className="view-all-button">View All</button>
       </div>
 
       <div className="ticket-table-wrapper">
@@ -35,16 +34,14 @@ function TicketTable({ tickets }: TicketTableProps) {
             {tickets.map((ticket) => (
               <tr key={ticket.id}>
                 <td className="ticket-id">
-                  {ticket.id}
+                  <Link to={`/tickets/${ticket.id}`} className="ticket-link">
+                    {ticket.id}
+                  </Link>
                 </td>
 
-                <td>
-                  {ticket.title}
-                </td>
+                <td>{ticket.title}</td>
 
-                <td>
-                  {ticket.category}
-                </td>
+                <td>{ticket.category}</td>
 
                 <td>
                   <span
@@ -64,9 +61,7 @@ function TicketTable({ tickets }: TicketTableProps) {
                   </span>
                 </td>
 
-                <td>
-                  {ticket.createdBy}
-                </td>
+                <td>{ticket.createdBy}</td>
               </tr>
             ))}
           </tbody>
