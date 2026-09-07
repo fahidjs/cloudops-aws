@@ -763,3 +763,28 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+/* ======================
+   API STATES
+====================== */
+
+.api-message {
+  margin-bottom: 20px;
+
+  padding: 14px 16px;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+
+  color: #475569;
+
+  font-size: 14px;
+}
+
+.api-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
