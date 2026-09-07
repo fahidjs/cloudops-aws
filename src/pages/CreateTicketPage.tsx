@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createTicket } from "../services/ticketService";
 
 function CreateTicketPage() {
   const [title, setTitle] = useState("");
@@ -6,8 +7,9 @@ function CreateTicketPage() {
   const [priority, setPriority] = useState("MEDIUM");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!title || !category || !description) {
@@ -15,24 +17,30 @@ function CreateTicketPage() {
       return;
     }
 
-    const newTicket = {
-      id: `CLO-${Date.now()}`,
-      title,
-      category,
-      priority,
-      description,
-      status: "OPEN",
-      createdAt: new Date().toISOString(),
-    };
+    try {
+      setSubmitting(true);
+      setMessage("");
 
-    console.log("New Ticket:", newTicket);
+      await createTicket({
+        title,
+        description,
+        category,
+        priority: priority as "LOW" | "MEDIUM" | "HIGH",
+        createdBy: "fahid@example.com",
+      });
 
-    setMessage("Ticket created successfully.");
+      setMessage("Ticket created successfully.");
 
-    setTitle("");
-    setCategory("");
-    setPriority("MEDIUM");
-    setDescription("");
+      setTitle("");
+      setCategory("");
+      setPriority("MEDIUM");
+      setDescription("");
+    } catch (error) {
+      console.error(error);
+      setMessage("Unable to create ticket.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -54,7 +62,6 @@ function CreateTicketPage() {
             onChange={(event) => setTitle(event.target.value)}
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="category">Category</label>
 
@@ -72,7 +79,6 @@ function CreateTicketPage() {
             <option value="Other">Other</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="priority">Priority</label>
 
@@ -86,7 +92,6 @@ function CreateTicketPage() {
             <option value="HIGH">High</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="description">Description</label>
 
@@ -98,15 +103,13 @@ function CreateTicketPage() {
             onChange={(event) => setDescription(event.target.value)}
           />
         </div>
-
-        {message && (
-          <p className="form-message">
-            {message}
-          </p>
-        )}
-
-        <button type="submit" className="submit-ticket-button">
-          Create Ticket
+        {message && <p className="form-message">{message}</p>}
+        <button
+          type="submit"
+          className="submit-ticket-button"
+          disabled={submitting}
+        >
+          {submitting ? "Creating..." : "Create Ticket"}
         </button>
       </form>
     </main>
