@@ -1,23 +1,73 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { mockTickets } from "../data/mockTickets";
+import { getTicket } from "../services/ticketService";
+import type { Ticket } from "../types/ticket";
 
 function TicketDetailsPage() {
   const { ticketId } = useParams();
 
-  const ticket = mockTickets.find(
-    (item) => item.ticketId === ticketId
-  );
+  const [ticket, setTicket] =
+    useState<Ticket | null>(null);
 
-  if (!ticket) {
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+  useEffect(() => {
+    async function loadTicket() {
+      if (!ticketId) {
+        setError("Ticket ID is missing.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const data = await getTicket(ticketId);
+
+        setTicket(data);
+      } catch (err) {
+        console.error(err);
+
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Unable to load ticket.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadTicket();
+  }, [ticketId]);
+
+  if (loading) {
+    return (
+      <main className="ticket-details-page">
+        <div className="api-message">
+          Loading ticket...
+        </div>
+      </main>
+    );
+  }
+
+  if (error || !ticket) {
     return (
       <main className="ticket-details-page">
         <div className="page-header">
           <h1>Ticket Not Found</h1>
-          <p>The requested support ticket could not be found.</p>
+          <p>
+            {error || "The ticket could not be found."}
+          </p>
         </div>
 
-        <Link to="/tickets" className="back-link">
-          Back to My Tickets
+        <Link
+          to="/tickets"
+          className="back-link"
+        >
+          ← Back to My Tickets
         </Link>
       </main>
     );
@@ -27,7 +77,10 @@ function TicketDetailsPage() {
     <main className="ticket-details-page">
       <div className="ticket-details-top">
         <div>
-          <Link to="/tickets" className="back-link">
+          <Link
+            to="/tickets"
+            className="back-link"
+          >
             ← Back to My Tickets
           </Link>
 
@@ -39,7 +92,8 @@ function TicketDetailsPage() {
             <h1>{ticket.title}</h1>
 
             <p>
-              View the details and current status of this support request.
+              View the details and current status
+              of this support request.
             </p>
           </div>
         </div>
@@ -91,7 +145,9 @@ function TicketDetailsPage() {
                 <span>Created</span>
 
                 <strong>
-                  {new Date(ticket.createdAt).toLocaleString()}
+                  {new Date(
+                    ticket.createdAt
+                  ).toLocaleString()}
                 </strong>
               </div>
             </div>
@@ -103,11 +159,16 @@ function TicketDetailsPage() {
 
           <div className="requester-info">
             <div className="requester-avatar">
-              {ticket.createdBy.charAt(0).toUpperCase()}
+              {ticket.createdBy
+                .charAt(0)
+                .toUpperCase()}
             </div>
 
             <div>
-              <strong>{ticket.createdBy}</strong>
+              <strong>
+                {ticket.createdBy}
+              </strong>
+
               <span>Ticket requester</span>
             </div>
           </div>
