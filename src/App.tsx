@@ -1,26 +1,81 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from "react-router-dom";
+
 import Sidebar from "./components/Sidebar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import DashboardPage from "./pages/DashboardPage";
-import CreateTicketPage from "./pages/CreateTicketPage";
 import MyTicketsPage from "./pages/MyTicketsPage";
+import CreateTicketPage from "./pages/CreateTicketPage";
 import TicketDetailsPage from "./pages/TicketDetailsPage";
+import LoginPage from "./pages/LoginPage";
+
 import "./App.css";
+
+function ProtectedLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ProtectedRoute>
+      <div className="app">
+        <Sidebar />
+        {children}
+      </div>
+    </ProtectedRoute>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="app">
-        <Sidebar />
+      <Routes>
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
 
-        <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/tickets" element={<MyTicketsPage />} />
-          <Route path="/create-ticket" element={<CreateTicketPage />} />
-          <Route path="/tickets/:ticketId" element={<TicketDetailsPage />} />
-        </Routes>
-      </div>
+        <Route
+          path="/"
+          element={
+            <ProtectedLayout>
+              <DashboardPage />
+            </ProtectedLayout>
+          }
+        />
+
+        <Route
+          path="/tickets"
+          element={
+            <ProtectedLayout>
+              <MyTicketsPage />
+            </ProtectedLayout>
+          }
+        />
+
+        <Route
+          path="/tickets/:ticketId"
+          element={
+            <ProtectedLayout>
+              <TicketDetailsPage />
+            </ProtectedLayout>
+          }
+        />
+
+        <Route
+          path="/create-ticket"
+          element={
+            <ProtectedLayout>
+              <CreateTicketPage />
+            </ProtectedLayout>
+          }
+        />
+      </Routes>
     </BrowserRouter>
-
   );
 }
 
