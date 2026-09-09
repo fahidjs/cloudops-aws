@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getTicket } from "../services/ticketService";
-import type { Ticket } from "../types/ticket";
+import { getTicket, updateTicketStatus } from "../services/ticketService";
+
+import type { Ticket, TicketStatus } from "../types/ticket";
 
 function TicketDetailsPage() {
   const { ticketId } = useParams();
 
-  const [ticket, setTicket] =
-    useState<Ticket | null>(null);
+  const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
     async function loadTicket() {
@@ -43,12 +42,40 @@ function TicketDetailsPage() {
     loadTicket();
   }, [ticketId]);
 
+  async function handleStatusChange(newStatus: TicketStatus) {
+    if (!ticket) {
+      return;
+    }
+
+    try {
+      setUpdatingStatus(true);
+      setStatusMessage("");
+
+      const updatedTicket = await updateTicketStatus(
+        ticket.ticketId,
+        newStatus,
+      );
+
+      setTicket(updatedTicket);
+
+      setStatusMessage("Ticket status updated successfully.");
+    } catch (err) {
+      console.error(err);
+
+      if (err instanceof Error) {
+        setStatusMessage(err.message);
+      } else {
+        setStatusMessage("Unable to update ticket status.");
+      }
+    } finally {
+      setUpdatingStatus(false);
+    }
+  }
+
   if (loading) {
     return (
       <main className="ticket-details-page">
-        <div className="api-message">
-          Loading ticket...
-        </div>
+        <div className="api-message">Loading ticket...</div>
       </main>
     );
   }
@@ -58,15 +85,11 @@ function TicketDetailsPage() {
       <main className="ticket-details-page">
         <div className="page-header">
           <h1>Ticket Not Found</h1>
-          <p>
-            {error || "The ticket could not be found."}
-          </p>
+
+          <p>{error || "The ticket could not be found."}</p>
         </div>
 
-        <Link
-          to="/tickets"
-          className="back-link"
-        >
+        <Link to="/tickets" className="back-link">
           ← Back to My Tickets
         </Link>
       </main>
@@ -77,24 +100,16 @@ function TicketDetailsPage() {
     <main className="ticket-details-page">
       <div className="ticket-details-top">
         <div>
-          <Link
-            to="/tickets"
-            className="back-link"
-          >
+          <Link to="/tickets" className="back-link">
             ← Back to My Tickets
           </Link>
 
           <div className="page-header ticket-details-heading">
-            <span className="ticket-detail-id">
-              {ticket.ticketId}
-            </span>
+            <span className="ticket-detail-id">{ticket.ticketId}</span>
 
             <h1>{ticket.title}</h1>
 
-            <p>
-              View the details and current status
-              of this support request.
-            </p>
+            <p>View the details and current status of this support request.</p>
           </div>
         </div>
       </div>
@@ -103,6 +118,7 @@ function TicketDetailsPage() {
         <section className="ticket-details-card">
           <div className="detail-section">
             <h2>Description</h2>
+
             <p>{ticket.description}</p>
           </div>
 
@@ -112,6 +128,7 @@ function TicketDetailsPage() {
             <div className="detail-grid">
               <div className="detail-item">
                 <span>Category</span>
+
                 <strong>{ticket.category}</strong>
               </div>
 
@@ -144,13 +161,32 @@ function TicketDetailsPage() {
               <div className="detail-item">
                 <span>Created</span>
 
-                <strong>
-                  {new Date(
-                    ticket.createdAt
-                  ).toLocaleString()}
-                </strong>
+                <strong>{new Date(ticket.createdAt).toLocaleString()}</strong>
+              </div>
+
+              <div className="detail-item">
+                <span>Change Status</span>
+
+                <select
+                  className="status-select"
+                  value={ticket.status}
+                  disabled={updatingStatus}
+                  onChange={(event) =>
+                    handleStatusChange(event.target.value as TicketStatus)
+                  }
+                >
+                  <option value="OPEN">Open</option>
+
+                  <option value="IN_PROGRESS">In Progress</option>
+
+                  <option value="RESOLVED">Resolved</option>
+                </select>
               </div>
             </div>
+
+            {statusMessage && (
+              <p className="status-update-message">{statusMessage}</p>
+            )}
           </div>
         </section>
 
@@ -159,15 +195,11 @@ function TicketDetailsPage() {
 
           <div className="requester-info">
             <div className="requester-avatar">
-              {ticket.createdBy
-                .charAt(0)
-                .toUpperCase()}
+              {ticket.createdBy.charAt(0).toUpperCase()}
             </div>
 
             <div>
-              <strong>
-                {ticket.createdBy}
-              </strong>
+              <strong>{ticket.createdBy}</strong>
 
               <span>Ticket requester</span>
             </div>

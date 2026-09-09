@@ -793,3 +793,42 @@ button {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.status-select {
+  width: 100%;
+
+  padding: 10px 12px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: white;
+  color: #0f172a;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+}
+
+.status-select:focus {
+  border-color: #2563eb;
+}
+
+.status-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-update-message {
+  margin-top: 18px;
+
+  padding: 10px 12px;
+
+  background: #eff6ff;
+  color: #1d4ed8;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+}
