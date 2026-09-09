@@ -18,7 +18,6 @@ export interface CreateTicketInput {
   description: string;
   category: string;
   priority: "LOW" | "MEDIUM" | "HIGH";
-  createdBy: string;
 }
 
 export async function getTickets(): Promise<Ticket[]> {

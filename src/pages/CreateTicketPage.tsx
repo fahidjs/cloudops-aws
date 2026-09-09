@@ -26,7 +26,6 @@ function CreateTicketPage() {
         description,
         category,
         priority: priority as "LOW" | "MEDIUM" | "HIGH",
-        createdBy: "fahid@example.com",
       });
 
       setMessage("Ticket created successfully.");
