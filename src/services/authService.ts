@@ -1,4 +1,5 @@
 import {
+  fetchAuthSession,
   fetchUserAttributes,
   getCurrentUser,
   signIn,
@@ -9,12 +10,20 @@ export async function login(
   email: string,
   password: string,
 ) {
-  const result = await signIn({
+  try {
+    await getCurrentUser();
+
+    // Cognito still has an existing session.
+    // Clear it before starting a fresh login.
+    await signOut();
+  } catch {
+    // No authenticated user exists, which is fine.
+  }
+
+  return await signIn({
     username: email,
     password,
   });
-
-  return result;
 }
 
 export async function logout() {
@@ -24,7 +33,9 @@ export async function logout() {
 export async function getAuthenticatedUser() {
   try {
     const user = await getCurrentUser();
-    const attributes = await fetchUserAttributes();
+
+    const attributes =
+      await fetchUserAttributes();
 
     return {
       username: user.username,
@@ -34,4 +45,19 @@ export async function getAuthenticatedUser() {
   } catch {
     return null;
   }
+}
+
+export async function getAccessToken(): Promise<string> {
+  const session = await fetchAuthSession();
+
+  const accessToken =
+    session.tokens?.accessToken?.toString();
+
+  if (!accessToken) {
+    throw new Error(
+      "No authentication token available.",
+    );
+  }
+
+  return accessToken;
 }

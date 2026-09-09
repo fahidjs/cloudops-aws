@@ -1,7 +1,12 @@
+import {
+  authenticatedFetch,
+} from "./apiClient";
+
 import type {
   Ticket,
   TicketStatus,
 } from "../types/ticket";
+
 
 import type { TicketsResponse } from "../types/api";
 
@@ -17,7 +22,7 @@ export interface CreateTicketInput {
 }
 
 export async function getTickets(): Promise<Ticket[]> {
-  const response = await fetch(`${API_URL}/tickets`);
+  const response = await authenticatedFetch(`${API_URL}/tickets`);
 
   if (!response.ok) {
     throw new Error("Failed to retrieve tickets.");
@@ -31,7 +36,7 @@ export async function getTickets(): Promise<Ticket[]> {
 export async function getTicket(
   ticketId: string
 ): Promise<Ticket> {
-  const response = await fetch(
+  const response = await authenticatedFetch(
     `${API_URL}/tickets/${ticketId}`
   );
 
@@ -52,7 +57,7 @@ export async function getTicket(
 export async function createTicket(
   ticket: CreateTicketInput
 ): Promise<Ticket> {
-  const response = await fetch(`${API_URL}/tickets`, {
+  const response = await authenticatedFetch(`${API_URL}/tickets`, {
     method: "POST",
 
     headers: {
@@ -80,7 +85,7 @@ export async function updateTicketStatus(
   ticketId: string,
   status: TicketStatus
 ): Promise<Ticket> {
-  const response = await fetch(
+  const response = await authenticatedFetch(
     `${API_URL}/tickets/${ticketId}`,
     {
       method: "PATCH",
