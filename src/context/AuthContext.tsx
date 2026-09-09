@@ -10,10 +10,15 @@ import {
   logout as cognitoLogout,
 } from "../services/authService";
 
+export type UserRole =
+  | "ADMIN"
+  | "EMPLOYEE";
+
 interface AuthUser {
   username: string;
   userId: string;
   email: string;
+  role: UserRole;
 }
 
 interface AuthContextValue {

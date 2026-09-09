@@ -27,25 +27,17 @@ function Navbar() {
       <div className="navbar-actions">
         <div className="navbar-user">
           <div className="user-avatar">
-            {user?.email
-              ? user.email.charAt(0).toUpperCase()
-              : "U"}
+            {user?.email ? user.email.charAt(0).toUpperCase() : "U"}
           </div>
 
           <div>
-            <strong>
-              {user?.email || "CloudOps User"}
-            </strong>
+            <strong>{user?.email || "CloudOps User"}</strong>
 
-            <span>Administrator</span>
+            <span>{user?.role === "ADMIN" ? "Administrator" : "Employee"}</span>
           </div>
         </div>
 
-        <button
-          type="button"
-          className="logout-button"
-          onClick={handleLogout}
-        >
+        <button type="button" className="logout-button" onClick={handleLogout}>
           Sign Out
         </button>
       </div>

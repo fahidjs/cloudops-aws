@@ -1,10 +1,22 @@
+import type { UserRole } from "../context/AuthContext";
+
 import {
+  confirmSignIn,
   fetchAuthSession,
   fetchUserAttributes,
   getCurrentUser,
   signIn,
   signOut,
 } from "aws-amplify/auth";
+
+
+export async function completeNewPassword(
+  newPassword: string,
+) {
+  return await confirmSignIn({
+    challengeResponse: newPassword,
+  });
+}
 
 export async function login(
   email: string,
@@ -37,10 +49,28 @@ export async function getAuthenticatedUser() {
     const attributes =
       await fetchUserAttributes();
 
+    const session =
+      await fetchAuthSession();
+
+    const groups =
+      session.tokens?.accessToken
+        ?.payload?.["cognito:groups"];
+
+    const groupList =
+      Array.isArray(groups)
+        ? groups
+        : [];
+
+    const role: UserRole =
+      groupList.includes("Admins")
+        ? "ADMIN"
+        : "EMPLOYEE";
+
     return {
       username: user.username,
       userId: user.userId,
       email: attributes.email ?? "",
+      role,
     };
   } catch {
     return null;
